@@ -1,31 +1,20 @@
-import { createServer } from 'http';
-import { readFile } from 'fs';
+const express = require('express');
+const app = express();
 
-createServer((req, res) => {
-    let filename;
-    switch (req.url) {
-        case '/':{
-            filename = "index.html";
-            break;
-        }
-        case '/contact-me': {
-            filename = "contact-me.html";
-            break;
-        }
-        case '/about': {
-            filename = "about.html";
-            break;
-        }
-        default:{
-            filename = "404.html";
-            break;
-        }
-    }
+app.get('/', (req, res) => {
+    res.sendFile("/index.html", { root: __dirname });
+});
 
-    readFile(filename, (err, data) => {
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.write(data);
-        return res.end();
-    });
+app.get('/contact-me', (req, res) => {
+    res.sendFile("/contact-me.html", { root: __dirname });
+});
 
-}).listen(8080);
+app.get('/about', (req, res) => {
+    res.sendFile("/about.html", { root: __dirname });
+});
+
+app.get('/*', (req, res) => {
+    res.sendFile("/404.html", {root: __dirname });
+});
+
+app.listen(3000);
